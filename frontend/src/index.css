@@ -50,11 +50,11 @@ body {
 }
 
 .login-glow {
-  width: 420px;
-  height: 420px;
+  width: 280px;
+  height: 280px;
   border-radius: 999px;
-  filter: blur(80px);
-  opacity: 0.45;
+  filter: blur(70px);
+  opacity: 0.35;
 }
 
 .login-glow-left {
