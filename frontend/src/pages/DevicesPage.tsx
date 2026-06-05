@@ -1,4 +1,4 @@
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Wrench } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -101,6 +101,19 @@ export function DevicesPage() {
                       <Link className="text-accent" to={`/devices/${device.id}`}>
                         Ko'rish
                       </Link>
+                      {device.status !== "online" ? (
+                        <button
+                          className="text-emerald-300"
+                          onClick={async () => {
+                            await devicesApi.resolve(device.id);
+                            await loadDevices();
+                          }}
+                          title="Tuzatildi deb belgilash"
+                          type="button"
+                        >
+                          <Wrench className="h-4 w-4" />
+                        </button>
+                      ) : null}
                       {role === "admin" ? (
                         <>
                           <button

@@ -8,6 +8,7 @@ from app.models.metric import Metric
 from app.schemas.device import DeviceCreate, DeviceResponse, DeviceUpdate
 from app.schemas.metric import MetricResponse
 from app.services.auth import require_admin
+from app.services.device_ops import resolve_device
 
 router = APIRouter(prefix="/devices", tags=["devices"])
 
@@ -44,6 +45,14 @@ def update_device(device_id: int, payload: DeviceUpdate, db: Session = Depends(g
     db.commit()
     db.refresh(device)
     return device
+
+
+@router.post("/{device_id}/resolve", response_model=DeviceResponse)
+def resolve_device_endpoint(device_id: int, db: Session = Depends(get_db), user=Depends(current_user)):
+    device = db.query(Device).filter(Device.id == device_id).first()
+    if not device:
+        raise HTTPException(status_code=404, detail="Device not found")
+    return resolve_device(db, device)
 
 
 @router.delete("/{device_id}", status_code=status.HTTP_204_NO_CONTENT)

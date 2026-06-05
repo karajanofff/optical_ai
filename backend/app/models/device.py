@@ -1,4 +1,6 @@
-from sqlalchemy import Float, Integer, String
+from datetime import datetime
+
+from sqlalchemy import DateTime, Float, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.session import Base
@@ -13,6 +15,7 @@ class Device(Base):
     location: Mapped[str] = mapped_column(String(120))
     ip_address: Mapped[str] = mapped_column(String(64), unique=True)
     status: Mapped[str] = mapped_column(String(32), default="online")
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True, default=None)
     signal_strength: Mapped[float] = mapped_column(Float, default=-18.0)
     latency: Mapped[float] = mapped_column(Float, default=2.0)
     packet_loss: Mapped[float] = mapped_column(Float, default=0.1)

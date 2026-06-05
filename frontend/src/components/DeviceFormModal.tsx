@@ -82,18 +82,30 @@ export function DeviceFormModal({ device, onClose, onSubmit }: DeviceFormModalPr
           {fields.map(({ key, type }) => (
             <label key={key} className="text-sm text-slate-300">
               <span className="mb-2 block capitalize">{fieldLabels[key]}</span>
-              <input
-                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none ring-0"
-                type={type}
-                step="any"
-                value={form[key]}
-                onChange={(event) =>
-                  setForm((current) => ({
-                    ...current,
-                    [key]: type === "number" ? Number(event.target.value) : event.target.value
-                  }) as Omit<Device, "id">)
-                }
-              />
+              {key === "status" ? (
+                <select
+                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none ring-0"
+                  value={form.status}
+                  onChange={(event) => setForm((current) => ({ ...current, status: event.target.value }))}
+                >
+                  <option value="online">Onlayn</option>
+                  <option value="warning">Ogohlantirish</option>
+                  <option value="offline">Oflayn</option>
+                </select>
+              ) : (
+                <input
+                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none ring-0"
+                  type={type}
+                  step="any"
+                  value={form[key]}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      [key]: type === "number" ? Number(event.target.value) : event.target.value
+                    }) as Omit<Device, "id">)
+                  }
+                />
+              )}
             </label>
           ))}
           <div className="md:col-span-2 flex justify-end gap-3">

@@ -1,3 +1,4 @@
+import { Wrench } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -12,23 +13,26 @@ export function DeviceDetailsPage() {
   const [device, setDevice] = useState<Device | null>(null);
   const [metrics, setMetrics] = useState<DeviceMetric[]>([]);
   const [prediction, setPrediction] = useState<PredictionResult | null>(null);
+  const [isResolving, setIsResolving] = useState(false);
+
+  const loadDevice = async (id: number) => {
+    const data = await devicesApi.get(id);
+    setDevice(data);
+    const nextPrediction = await aiApi.predict({
+      signal_strength: data.signal_strength,
+      latency: data.latency,
+      packet_loss: data.packet_loss,
+      traffic_load: data.traffic_load,
+      uptime: data.uptime,
+      temperature: data.temperature
+    });
+    setPrediction(nextPrediction);
+    const metricData = await devicesApi.metrics(id);
+    setMetrics(metricData.reverse());
+  };
 
   useEffect(() => {
-    const id = Number(params.id);
-    devicesApi.get(id).then((data) => {
-      setDevice(data);
-      aiApi
-        .predict({
-          signal_strength: data.signal_strength,
-          latency: data.latency,
-          packet_loss: data.packet_loss,
-          traffic_load: data.traffic_load,
-          uptime: data.uptime,
-          temperature: data.temperature
-        })
-        .then(setPrediction);
-    });
-    devicesApi.metrics(id).then((data) => setMetrics(data.reverse()));
+    loadDevice(Number(params.id)).catch(() => undefined);
   }, [params.id]);
 
   const chartData = useMemo(
@@ -69,6 +73,25 @@ export function DeviceDetailsPage() {
           <div className="flex items-center gap-3">
             <StatusBadge status={device.status} />
             {prediction ? <SeverityBadge severity={prediction.prediction} /> : null}
+            {device.status !== "online" ? (
+              <button
+                className="flex items-center gap-2 rounded-2xl bg-emerald-500/15 px-4 py-2 text-sm font-semibold text-emerald-300 hover:bg-emerald-500/25 disabled:opacity-60"
+                disabled={isResolving}
+                onClick={async () => {
+                  setIsResolving(true);
+                  try {
+                    await devicesApi.resolve(device.id);
+                    await loadDevice(device.id);
+                  } finally {
+                    setIsResolving(false);
+                  }
+                }}
+                type="button"
+              >
+                <Wrench className="h-4 w-4" />
+                {isResolving ? "Tuzatilmoqda..." : "Tuzatildi deb belgilash"}
+              </button>
+            ) : null}
           </div>
         </div>
       </section>

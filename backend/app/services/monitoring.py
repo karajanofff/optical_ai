@@ -9,19 +9,36 @@ from app.models.metric import Metric
 from app.services.ai_service import ai_service
 
 
+def _is_recently_resolved(device: Device) -> bool:
+    if device.resolved_at is None:
+        return False
+    return device.resolved_at > datetime.utcnow() - timedelta(minutes=30)
+
+
 def generate_live_metrics(db: Session, device: Device) -> dict:
-    signal_strength = round(device.signal_strength + uniform(-2.4, 1.2), 2)
-    latency = round(max(0.5, device.latency + uniform(-0.8, 2.5)), 2)
-    packet_loss = round(max(0.0, min(9.9, device.packet_loss + uniform(-0.2, 1.1))), 2)
-    traffic_load = round(max(40.0, min(1400.0, device.traffic_load + uniform(-70.0, 120.0))), 2)
-    uptime = round(max(1.0, device.uptime + uniform(-10.0, 18.0)), 2)
-    temperature = round(max(18.0, min(88.0, device.temperature + uniform(-1.2, 3.0))), 2)
+    if _is_recently_resolved(device):
+        signal_strength = round(-18.0 + uniform(-1.2, 1.0), 2)
+        latency = round(2.5 + uniform(-0.4, 0.4), 2)
+        packet_loss = round(max(0.0, 0.2 + uniform(-0.08, 0.12)), 2)
+        traffic_load = round(300.0 + uniform(-40.0, 60.0), 2)
+        uptime = round(max(1.0, device.uptime + uniform(0.0, 5.0)), 2)
+        temperature = round(33.0 + uniform(-1.5, 1.5), 2)
+    else:
+        signal_strength = round(device.signal_strength + uniform(-2.4, 1.2), 2)
+        latency = round(max(0.5, device.latency + uniform(-0.8, 2.5)), 2)
+        packet_loss = round(max(0.0, min(9.9, device.packet_loss + uniform(-0.2, 1.1))), 2)
+        traffic_load = round(max(40.0, min(1400.0, device.traffic_load + uniform(-70.0, 120.0))), 2)
+        uptime = round(max(1.0, device.uptime + uniform(-10.0, 18.0)), 2)
+        temperature = round(max(18.0, min(88.0, device.temperature + uniform(-1.2, 3.0))), 2)
     ai_result = ai_service.predict([signal_strength, latency, packet_loss, traffic_load, uptime, temperature])
     status = "online"
     if ai_result["prediction"] == "critical":
         status = "offline"
     elif ai_result["prediction"] == "warning":
         status = "warning"
+
+    if _is_recently_resolved(device) and ai_result["prediction"] != "critical":
+        status = "online"
 
     db.add(
         Metric(

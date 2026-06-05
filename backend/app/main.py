@@ -7,7 +7,7 @@ from app.ai.train_model import train_and_save_model
 from app.api import ai, alerts, auth, devices, metrics, reports, topology
 from app.core.config import get_settings
 from app.db.base import *  # noqa: F401,F403
-from app.db.session import Base, SessionLocal, engine, wait_for_database
+from app.db.session import Base, SessionLocal, engine, ensure_schema_updates, wait_for_database
 from app.services.ai_service import ai_service
 from app.utils.seed import seed_database
 
@@ -18,6 +18,7 @@ settings = get_settings()
 async def lifespan(app: FastAPI):
     wait_for_database()
     Base.metadata.create_all(bind=engine)
+    ensure_schema_updates()
     train_and_save_model(settings.model_path)
     ai_service.load_model()
     db = SessionLocal()

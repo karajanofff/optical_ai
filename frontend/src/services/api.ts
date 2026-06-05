@@ -41,6 +41,7 @@ export const devicesApi = {
   create: async (payload: Omit<Device, "id">) => (await api.post<Device>("/devices", payload)).data,
   update: async (id: number, payload: Omit<Device, "id">) => (await api.put<Device>(`/devices/${id}`, payload)).data,
   remove: async (id: number) => api.delete(`/devices/${id}`),
+  resolve: async (id: number) => (await api.post<Device>(`/devices/${id}/resolve`)).data,
   metrics: async (id: number) => (await api.get<DeviceMetric[]>(`/devices/${id}/metrics`)).data
 };
 

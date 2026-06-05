@@ -12,6 +12,13 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, futu
 Base = declarative_base()
 
 
+def ensure_schema_updates() -> None:
+    with engine.begin() as connection:
+        connection.execute(
+            text("ALTER TABLE devices ADD COLUMN IF NOT EXISTS resolved_at TIMESTAMP")
+        )
+
+
 def wait_for_database(max_attempts: int = 20, delay_seconds: int = 3) -> None:
     last_error: OperationalError | None = None
     for _ in range(max_attempts):
