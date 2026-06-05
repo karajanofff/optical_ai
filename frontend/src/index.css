@@ -31,117 +31,73 @@ body {
   border-radius: 999px;
 }
 
-/* Login page */
-.login-page {
-  background:
-    radial-gradient(circle at 15% 20%, rgba(34, 211, 238, 0.14), transparent 28%),
-    radial-gradient(circle at 85% 10%, rgba(59, 130, 246, 0.12), transparent 24%),
-    radial-gradient(circle at 50% 100%, rgba(45, 212, 191, 0.1), transparent 32%),
-    linear-gradient(180deg, #010409 0%, #07111f 55%, #020617 100%);
+/* Login portal — light corporate style */
+.login-portal {
+  background: #f4f6f8;
+  color: #1e293b;
 }
 
-.login-grid {
-  background-image:
-    linear-gradient(rgba(45, 212, 191, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(45, 212, 191, 0.05) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(circle at center, black 35%, transparent 90%);
-  animation: login-grid-drift 24s linear infinite;
+.login-portal-header {
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
 }
 
-.login-glow {
-  width: 420px;
-  height: 420px;
-  border-radius: 999px;
-  filter: blur(80px);
-  opacity: 0.45;
+.login-portal-call {
+  background: #107c6e;
 }
 
-.login-glow-left {
-  top: 10%;
-  left: -8%;
-  background: rgba(45, 212, 191, 0.22);
-  animation: login-float 10s ease-in-out infinite;
+.login-portal-call:hover {
+  background: #0d6659;
 }
 
-.login-glow-right {
-  right: -6%;
-  bottom: 8%;
-  background: rgba(59, 130, 246, 0.18);
-  animation: login-float 12s ease-in-out infinite reverse;
+.login-portal-dot {
+  animation: login-portal-pulse 2s ease-in-out infinite;
 }
 
-.login-shell {
-  background: rgba(2, 6, 23, 0.72);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 30px 100px rgba(2, 6, 23, 0.55);
-  backdrop-filter: blur(18px);
+.login-portal-card {
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
 }
 
-.login-panel-left {
-  background:
-    linear-gradient(135deg, rgba(8, 47, 73, 0.35), transparent 55%),
-    rgba(15, 23, 42, 0.45);
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
+.login-portal-input:focus-within {
+  border-color: #107c6e;
+  box-shadow: 0 0 0 3px rgba(16, 124, 110, 0.12);
 }
 
-.login-panel-right {
-  background: rgba(2, 6, 23, 0.55);
+.login-portal-submit {
+  background: #107c6e;
+  min-width: 140px;
 }
 
-.login-logo {
-  background: linear-gradient(135deg, rgba(45, 212, 191, 0.2), rgba(59, 130, 246, 0.15));
-  border: 1px solid rgba(45, 212, 191, 0.25);
-  box-shadow: 0 0 30px rgba(45, 212, 191, 0.15);
+.login-portal-submit:hover:not(:disabled) {
+  background: #0d6659;
 }
 
-.login-input-wrap:focus-within {
-  border-color: rgba(45, 212, 191, 0.45);
-  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.12);
+.login-portal-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #cbd5e1 20%, #cbd5e1 80%, transparent);
 }
 
-.login-submit {
-  background: linear-gradient(135deg, #2dd4bf 0%, #22d3ee 45%, #38bdf8 100%);
-  box-shadow: 0 12px 30px rgba(45, 212, 191, 0.25);
+.login-portal-alt {
+  background: #107c6e;
 }
 
-.login-submit:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 16px 36px rgba(45, 212, 191, 0.32);
+.login-portal-alt:hover:not(:disabled) {
+  background: #0d6659;
 }
 
-.login-pulse {
-  animation: login-pulse 2s ease-in-out infinite;
+.login-portal-fab {
+  background: #107c6e;
 }
 
-@keyframes login-grid-drift {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(48px);
-  }
+.login-portal-fab:hover {
+  background: #0d6659;
 }
 
-@keyframes login-float {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-18px) scale(1.04);
-  }
-}
-
-@keyframes login-pulse {
+@keyframes login-portal-pulse {
   0%,
   100% {
     opacity: 1;
-    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5);
   }
   50% {
-    opacity: 0.65;
-    box-shadow: 0 0 0 6px rgba(52, 211, 153, 0);
+    opacity: 0.5;
   }
 }

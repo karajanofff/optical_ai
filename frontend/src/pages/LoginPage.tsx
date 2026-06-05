@@ -1,21 +1,23 @@
-import { Activity, ArrowRight, Eye, EyeOff, LockKeyhole, Shield, Sparkles, User, Zap } from "lucide-react";
+import { ArrowRight, ChevronRight, Eye, EyeOff, Headphones, LockKeyhole, User } from "lucide-react";
 import { type FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { OpticalHeroIllustration } from "../components/OpticalHeroIllustration";
 import { useAuth } from "../context/AuthContext";
 
 const demoAccounts = [
-  { username: "admin", password: "admin123", role: "Admin", desc: "To'liq boshqaruv" },
-  { username: "operator", password: "operator123", role: "Operator", desc: "Kuzatuv va tuzatish" }
+  { username: "admin", password: "admin123", role: "Admin" },
+  { username: "operator", password: "operator123", role: "Operator" }
 ];
 
-const features = [
-  { icon: Activity, label: "Jonli telemetriya", color: "text-emerald-300" },
-  { icon: Sparkles, label: "AI tasnifi", color: "text-cyan-300" },
-  { icon: Shield, label: "Xavfsiz kirish", color: "text-blue-300" },
-  { icon: Zap, label: "Real vaqt ogohlantirish", color: "text-amber-300" }
-];
+function PortalLogo() {
+  return (
+    <svg className="h-11 w-11 shrink-0" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+      <circle cx="18" cy="24" r="11" stroke="#107C6E" strokeWidth="3" />
+      <circle cx="30" cy="24" r="11" stroke="#107C6E" strokeWidth="3" />
+      <circle cx="24" cy="14" r="9" stroke="#107C6E" strokeWidth="3" />
+    </svg>
+  );
+}
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -40,156 +42,156 @@ export function LoginPage() {
     }
   };
 
+  const quickLogin = async (account: (typeof demoAccounts)[number]) => {
+    setUsername(account.username);
+    setPassword(account.password);
+    setError("");
+    setLoading(true);
+    try {
+      await login(account.username, account.password);
+      navigate("/");
+    } catch {
+      setError("Kirish amalga oshmadi. Login va parolni tekshiring.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="login-page relative min-h-screen overflow-hidden">
-      <div className="login-grid pointer-events-none absolute inset-0" />
-      <div className="login-glow login-glow-left pointer-events-none absolute" />
-      <div className="login-glow login-glow-right pointer-events-none absolute" />
-
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 lg:px-8 lg:py-8">
-        <header className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="login-logo flex h-14 w-14 items-center justify-center rounded-2xl">
-              <Activity className="h-7 w-7 text-cyan-300" />
-            </div>
+    <div className="login-portal min-h-screen">
+      <header className="login-portal-header border-b border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <PortalLogo />
             <div>
-              <p className="text-xl font-bold text-white">Optik AI</p>
-              <p className="text-sm text-slate-400">Monitoring markazi</p>
+              <p className="text-sm font-semibold text-slate-800 sm:text-base">Optik AI Monitoring markazi</p>
+              <p className="hidden text-xs text-slate-500 sm:block">Tolali tarmoq boshqaruv tizimi</p>
             </div>
           </div>
-          <div className="hidden items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm text-emerald-200 md:flex">
-            <span className="login-pulse h-2 w-2 rounded-full bg-emerald-400" />
-            Tizim faol
-          </div>
-        </header>
 
-        <div className="flex flex-1 items-center">
-          <div className="login-shell grid w-full overflow-hidden rounded-[32px] border border-white/10 lg:grid-cols-[1.1fr_0.9fr]">
-            <section className="login-panel-left relative hidden flex-col justify-between p-8 lg:flex lg:p-10">
-              <div>
-                <p className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-cyan-200">
-                  <Sparkles className="h-3.5 w-3.5" />
-                  AI yordamidagi kuzatuv
-                </p>
-                <h1 className="mt-6 max-w-xl text-4xl font-extrabold leading-tight text-white xl:text-5xl">
-                  Optik tarmoqni real vaqtda boshqaring
-                </h1>
-                <p className="mt-5 max-w-lg text-base leading-7 text-slate-300">
-                  Nosozliklarni oldindan aniqlang, anomaliyalarni tuzating va tarmoq sog'lig'ini bir paneldan nazorat qiling.
-                </p>
-
-                <div className="mt-8 grid grid-cols-2 gap-3">
-                  {features.map(({ icon: Icon, label, color }) => (
-                    <div
-                      key={label}
-                      className="rounded-2xl border border-white/8 bg-white/5 px-4 py-3 backdrop-blur-sm"
-                    >
-                      <Icon className={`h-5 w-5 ${color}`} />
-                      <p className="mt-2 text-sm font-medium text-slate-200">{label}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <OpticalHeroIllustration />
-            </section>
-
-            <section className="login-panel-right flex flex-col justify-center p-6 sm:p-8 lg:p-10">
-              <div className="mx-auto w-full max-w-md">
-                <div className="mb-8 lg:hidden">
-                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-300">Optik AI Monitoring</p>
-                  <h2 className="mt-2 text-2xl font-bold text-white">Boshqaruv markaziga kiring</h2>
-                </div>
-
-                <div className="hidden lg:block">
-                  <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">Xavfsiz kirish</p>
-                  <h2 className="mt-3 text-3xl font-bold text-white">Boshqaruv markaziga kiring</h2>
-                  <p className="mt-3 text-sm text-slate-400">Hisobingiz bilan tizimga ulaning</p>
-                </div>
-
-                <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                  {demoAccounts.map((account) => (
-                    <button
-                      key={account.username}
-                      className={`rounded-2xl border px-4 py-3 text-left transition ${
-                        username === account.username
-                          ? "border-cyan-400/40 bg-cyan-400/10"
-                          : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8"
-                      }`}
-                      onClick={() => {
-                        setUsername(account.username);
-                        setPassword(account.password);
-                        setError("");
-                      }}
-                      type="button"
-                    >
-                      <p className="text-sm font-semibold text-white">{account.role}</p>
-                      <p className="mt-1 text-xs text-slate-400">{account.desc}</p>
-                      <p className="mt-2 font-mono text-xs text-cyan-300">{account.username}</p>
-                    </button>
-                  ))}
-                </div>
-
-                <form className="mt-8 space-y-5" onSubmit={handleLogin}>
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-medium text-slate-300">Foydalanuvchi nomi</span>
-                    <div className="login-input-wrap flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3">
-                      <User className="h-5 w-5 shrink-0 text-slate-500" />
-                      <input
-                        className="w-full bg-transparent text-white outline-none placeholder:text-slate-500"
-                        value={username}
-                        onChange={(event) => setUsername(event.target.value)}
-                        placeholder="admin yoki operator"
-                      />
-                    </div>
-                  </label>
-
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-medium text-slate-300">Parol</span>
-                    <div className="login-input-wrap flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3">
-                      <LockKeyhole className="h-5 w-5 shrink-0 text-slate-500" />
-                      <input
-                        className="w-full bg-transparent text-white outline-none placeholder:text-slate-500"
-                        type={showPassword ? "text" : "password"}
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        placeholder="Parolni kiriting"
-                      />
-                      <button
-                        className="text-slate-500 transition hover:text-slate-300"
-                        onClick={() => setShowPassword((current) => !current)}
-                        type="button"
-                      >
-                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                      </button>
-                    </div>
-                  </label>
-
-                  {error ? (
-                    <p className="rounded-2xl border border-rose-400/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
-                      {error}
-                    </p>
-                  ) : null}
-
-                  <button
-                    className="login-submit group flex w-full items-center justify-center gap-2 rounded-2xl px-4 py-3.5 font-semibold text-slate-950 transition disabled:opacity-60"
-                    disabled={loading}
-                    type="submit"
-                  >
-                    {loading ? "Kirilmoqda..." : "Panelga kirish"}
-                    {!loading ? <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" /> : null}
-                  </button>
-                </form>
-
-                <p className="mt-6 text-center text-xs text-slate-500">
-                  Demo: <span className="text-slate-400">admin / admin123</span> ·{" "}
-                  <span className="text-slate-400">operator / operator123</span>
-                </p>
-              </div>
-            </section>
+          <div className="flex items-center gap-3 sm:gap-5">
+            <div className="hidden items-center gap-2 text-sm text-slate-600 sm:flex">
+              <span className="login-portal-dot h-2 w-2 rounded-full bg-emerald-500" />
+              <span>Call center</span>
+              <span className="font-medium text-emerald-600">online</span>
+              <span className="text-slate-400">24/7</span>
+            </div>
+            <a
+              className="login-portal-call flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-white sm:px-4"
+              href="tel:1195"
+            >
+              <Headphones className="h-4 w-4" />
+              <span className="hidden sm:inline">Qo'llab-quvvatlash</span>
+              <span>1195</span>
+            </a>
           </div>
         </div>
-      </div>
+      </header>
+
+      <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+        <nav className="mb-6 flex items-center gap-2 text-sm text-slate-500">
+          <span>Asosiy sahifa</span>
+          <ChevronRight className="h-4 w-4" />
+          <span className="font-medium text-slate-700">Kirish</span>
+        </nav>
+
+        <div className="login-portal-card mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 md:p-10">
+          <h1 className="text-3xl font-bold text-slate-800">Kirish</h1>
+          <p className="mt-2 text-sm text-slate-600">
+            Yangi foydalanuvchimisiz?{" "}
+            <span className="font-medium text-[#107C6E]">Demo akkauntlardan foydalaning</span>
+          </p>
+
+          <form className="mt-8 space-y-5" onSubmit={handleLogin}>
+            <label className="block">
+              <span className="mb-2 block text-sm font-medium text-slate-700">Foydalanuvchi nomi</span>
+              <div className="login-portal-input flex overflow-hidden rounded-lg border border-slate-300 bg-white">
+                <span className="flex items-center border-r border-slate-200 bg-slate-50 px-4 text-sm text-slate-500">
+                  <User className="h-4 w-4" />
+                </span>
+                <input
+                  className="w-full px-4 py-3 text-sm text-slate-800 outline-none placeholder:text-slate-400"
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
+                  placeholder="admin yoki operator"
+                />
+              </div>
+            </label>
+
+            <label className="block">
+              <span className="mb-2 block text-sm font-medium text-slate-700">Parol</span>
+              <div className="login-portal-input flex items-center overflow-hidden rounded-lg border border-slate-300 bg-white">
+                <input
+                  className="w-full px-4 py-3 text-sm text-slate-800 outline-none placeholder:text-slate-400"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="Parolni kiriting"
+                />
+                <button
+                  className="px-4 text-slate-400 transition hover:text-slate-600"
+                  onClick={() => setShowPassword((current) => !current)}
+                  type="button"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
+            </label>
+
+            {error ? (
+              <p className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p>
+            ) : null}
+
+            <div className="flex flex-col-reverse items-stretch justify-between gap-4 pt-1 sm:flex-row sm:items-center">
+              <button
+                className="flex items-center justify-center gap-2 text-sm font-medium text-[#107C6E] transition hover:text-[#0d6659] sm:justify-start"
+                type="button"
+              >
+                <LockKeyhole className="h-4 w-4" />
+                Parolni tiklash
+              </button>
+              <button
+                className="login-portal-submit flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
+                disabled={loading}
+                type="submit"
+              >
+                {loading ? "Kirilmoqda..." : "Kirish"}
+                {!loading ? <ArrowRight className="h-4 w-4" /> : null}
+              </button>
+            </div>
+          </form>
+
+          <div className="login-portal-divider my-8" />
+
+          <p className="mb-4 text-center text-sm text-slate-600">Tezkor kirish uchun rolni tanlang</p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {demoAccounts.map((account) => (
+              <button
+                key={account.username}
+                className="login-portal-alt flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
+                disabled={loading}
+                onClick={() => quickLogin(account)}
+                type="button"
+              >
+                {account.role} sifatida kirish
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            ))}
+          </div>
+
+          <p className="mt-6 text-center text-xs text-slate-500">
+            Demo: admin / admin123 · operator / operator123
+          </p>
+        </div>
+      </main>
+
+      <button
+        className="login-portal-fab fixed bottom-6 right-6 flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:scale-105"
+        type="button"
+      >
+        <span className="text-lg leading-none">✦</span>
+        Monitoring
+      </button>
     </div>
   );
 }
