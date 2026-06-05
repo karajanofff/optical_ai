@@ -1,27 +1,17 @@
-interface OpticalHeroIllustrationProps {
-  compact?: boolean;
-}
-
-export function OpticalHeroIllustration({ compact = false }: OpticalHeroIllustrationProps) {
+export function OpticalHeroIllustration() {
   return (
-    <div
-      className={`overflow-hidden border border-white/10 bg-slate-950/40 shadow-premium ${
-        compact ? "mt-4 rounded-2xl p-3" : "mt-10 rounded-[32px] p-6"
-      }`}
-    >
-      <div className={`flex items-center justify-between ${compact ? "mb-2" : "mb-4"}`}>
+    <div className="mt-10 overflow-hidden rounded-[32px] border border-white/10 bg-slate-950/40 p-6 shadow-premium">
+      <div className="mb-4 flex items-center justify-between">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.3em] text-accent">Optik topologiya</p>
-          {!compact ? (
-            <h3 className="mt-1 text-xl font-semibold text-white">Tolali tarmoq monitoring xaritasi</h3>
-          ) : null}
+          <p className="text-xs uppercase tracking-[0.35em] text-accent">Optik topologiya</p>
+          <h3 className="mt-2 text-xl font-semibold text-white">Tolali tarmoq monitoring xaritasi</h3>
         </div>
-        <div className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-emerald-200">
-          Jonli
+        <div className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-200">
+          Jonli oqim
         </div>
       </div>
 
-      <svg viewBox="0 0 720 420" className={`w-full ${compact ? "max-h-[130px]" : ""}`}>
+      <svg viewBox="0 0 720 420" className="w-full">
         <defs>
           <linearGradient id="fiberStroke" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#2dd4bf" />
