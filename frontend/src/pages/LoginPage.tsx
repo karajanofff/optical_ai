@@ -78,11 +78,11 @@ export function LoginPage() {
             </div>
             <a
               className="login-portal-call flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-white sm:px-4"
-              href="tel:1195"
+              href="tel:7070"
             >
               <Headphones className="h-4 w-4" />
               <span className="hidden sm:inline">Qo'llab-quvvatlash</span>
-              <span>1195</span>
+              <span>7070</span>
             </a>
           </div>
         </div>
