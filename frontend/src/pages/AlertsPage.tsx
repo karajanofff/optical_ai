@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
+import { AlertRecommendations } from "../components/AlertRecommendations";
 import { SeverityBadge } from "../components/SeverityBadge";
-import { alertsApi } from "../services/api";
+import { alertsApi, devicesApi } from "../services/api";
 import type { AlertItem } from "../types";
 
 export function AlertsPage() {
@@ -45,10 +46,19 @@ export function AlertsPage() {
                   }}
                   type="button"
                 >
-                  {alert.is_read ? "O'qilmagan qilish" : "O'qildi deb belgilash"}
+                  {alert.is_read ? "O'qilmagan qilish" : "Ko'rib chiqildi"}
                 </button>
               </div>
             </div>
+            {!alert.is_read ? (
+              <AlertRecommendations
+                alert={alert}
+                onResolve={async () => {
+                  await devicesApi.resolve(alert.device_id);
+                  await loadAlerts();
+                }}
+              />
+            ) : null}
           </article>
         ))}
       </div>

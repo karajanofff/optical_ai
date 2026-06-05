@@ -16,6 +16,7 @@ import {
   YAxis
 } from "recharts";
 
+import { AlertRecommendations } from "../components/AlertRecommendations";
 import { SeverityBadge } from "../components/SeverityBadge";
 import { StatCard } from "../components/StatCard";
 import { StatusBadge } from "../components/StatusBadge";
@@ -179,6 +180,18 @@ export function DashboardPage() {
                   </div>
                   <SeverityBadge severity={alert.severity} />
                 </div>
+                {!alert.is_read ? (
+                  <AlertRecommendations
+                    alert={alert}
+                    compact
+                    onResolve={async () => {
+                      await devicesApi.resolve(alert.device_id);
+                      reportsApi.summary().then(setSummary).catch(() => undefined);
+                      devicesApi.list().then(setDevices).catch(() => undefined);
+                      alertsApi.list().then((data) => setAlerts(data.slice(0, 5))).catch(() => undefined);
+                    }}
+                  />
+                ) : null}
               </div>
             ))}
           </div>

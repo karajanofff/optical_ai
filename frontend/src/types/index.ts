@@ -25,11 +25,13 @@ export interface Device {
 export interface AlertItem {
   id: number;
   device_id: number;
+  device_name: string;
   title: string;
   message: string;
   severity: string;
   is_read: boolean;
   created_at: string;
+  recommendations: string[];
 }
 
 export interface MetricSnapshot {
